@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json()) //add json parser
+
 let persons = [
     { 
       id: "1",
@@ -48,6 +50,27 @@ app.delete('/api/persons/:id', (req, res) => {
     const id = req.params.id
     persons = persons.filter(i => i.id !== id)
     res.status(204).end()
+})
+
+
+const generateId = () => {
+    const id = Math.floor((Math.random() * 100000))
+    return String(id)
+}
+
+
+app.post('/api/persons', (req, res) => {
+    console.log(req.body)
+    
+    const body = req.body
+
+    const person = {
+        id: generateId(),
+        name: body.name,
+        number: body.number
+    }
+    persons = persons.concat(person)
+    res.json(person)
 })
 
 const PORT = 3001
