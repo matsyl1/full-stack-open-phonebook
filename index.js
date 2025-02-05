@@ -1,5 +1,5 @@
 const express = require('express')
-const app = express()
+const app = express() //initialize
 
 app.use(express.json()) //add json parser
 
@@ -42,7 +42,7 @@ app.get('/api/persons/:id', (req, res) => {
     if (person) {
         res.json(person)
     } else {
-        res.status(404).end()
+        res.status(404).json({error: 'The requested person does not exist'})
     }
 })
 
@@ -60,10 +60,12 @@ const generateId = () => {
 
 
 app.post('/api/persons', (req, res) => {
-    console.log(req.body)
-    
+    // console.log(req.body)
     const body = req.body
-
+    const uniqueName = !persons.some(p => p.name === body.name)
+    if(!body.name || !body.number || !uniqueName) {
+        return res.status(400).json({error: 'Name must be unique and name/number cannot be empty'})
+    }
     const person = {
         id: generateId(),
         name: body.name,
@@ -71,7 +73,8 @@ app.post('/api/persons', (req, res) => {
     }
     persons = persons.concat(person)
     res.json(person)
-})
+    }
+)
 
 const PORT = 3001
 app.listen(PORT, () => {
