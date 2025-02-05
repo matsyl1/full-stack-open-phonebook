@@ -1,7 +1,9 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express() //initialize
 
 app.use(express.json()) //add json parser
+app.use(morgan('tiny'))
 
 let persons = [
     { 
