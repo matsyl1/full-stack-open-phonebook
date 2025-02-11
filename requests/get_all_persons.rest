@@ -1,1 +1,2 @@
-GET http://localhost:3001/api/persons
+# GET http://localhost:3001/api/persons
+GET https://full-stack-open-test-part3.onrender.com/api/persons
