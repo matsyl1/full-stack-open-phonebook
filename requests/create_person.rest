@@ -1,8 +1,8 @@
-# POST http://localhost:3001/api/persons
-POST https://full-stack-open-test-part3.onrender.com/api/persons
+POST http://localhost:3001/api/persons
+# POST https://full-stack-open-test-part3.onrender.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "Peter Pan",
-    "number": "123-123-123"
+    "name": "Test Name",
+    "number": "222-222-222"
 }

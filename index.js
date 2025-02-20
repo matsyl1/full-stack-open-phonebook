@@ -4,8 +4,8 @@ const morgan = require('morgan')
 const app = express() 
 const Person = require('./models/person')
 
-app.use(express.static('dist'))
 app.use(express.json()) 
+app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 morgan.token('body', (req, res) => req.method === "POST" ? JSON.stringify(req.body) : null)
@@ -34,17 +34,31 @@ morgan.token('body', (req, res) => req.method === "POST" ? JSON.stringify(req.bo
 //     }
 // ]
 
-// app.get('/info', (req, res) => {
-//     const entries = persons.length
-//     const date = new Date()
-//     res.send(`<p>Phonebook has info for ${entries} people</p><p>${date}</p>`)
-//   })
+app.get('/api/info', (req, res) => {
+  Person.countDocuments({})
+    .then(entries => {
+      const date = new Date()
+      res.send(`<p>Phonebook has info for ${entries} people</p><p>${date}</p>`)
+    })
+})
 
 app.get('/api/persons', (req, res) => {
     Person.find({}).then(persons => {
       res.json(persons)
     })
   })
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+    const person = new Person ({
+        name: body.name,
+        number: body.number
+    })
+
+    person.save().then(savedPerson => {
+      res.json(savedPerson)
+    })
+})
 
 // app.get('/api/persons/:id', (req, res) => {
 //     const id = req.params.id
