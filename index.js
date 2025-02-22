@@ -10,7 +10,7 @@ const app = express()
 app.use(express.json()) 
 app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-app.use(cors)
+app.use(cors())
 
 morgan.token('body', (req, res) => req.method === "POST" ? JSON.stringify(req.body) : null)
 
@@ -61,6 +61,13 @@ app.post('/api/persons', (req, res) => {
 
     person.save().then(savedPerson => {
       res.json(savedPerson)
+    })
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then(result => {
+      res.status(204).end()
     })
 })
 
