@@ -30,15 +30,39 @@ app.get('/api/persons', (req, res) => {
     })
   })
 
+app.get('/api/persons/:id', (req, res, next) => {
+  Person.findById(req.params.id)
+  .then(person => {
+    if (person) {
+      res.json(person)
+    } else {
+      res.status(404).end({error: 'The requested person does not exist'})
+    }
+  })
+  .catch(error => next(error))
+})  
+
 app.post('/api/persons', (req, res) => {
     const body = req.body
-    const person = new Person ({
-        name: body.name,
-        number: body.number
-    })
 
-    person.save().then(savedPerson => {
-      res.json(savedPerson)
+    if(!body.name || !body.number) {
+      return res.status(400).json({error: 'Name/number cannot be empty'})
+    }
+
+    Person.findOne({ name: body.name })
+      .then(existingPerson => {
+        if (existingPerson) {
+          return res.status(400).json({error: 'Contact already exists'})
+        }
+
+        const person = new Person ({
+          name: body.name,
+          number: body.number
+        })
+
+      return person.save().then(savedPerson => {
+        res.status(201).json(savedPerson)
+      })
     })
 })
 
@@ -105,6 +129,12 @@ app.put('/api/persons/:id', (req, res, next) => {
 //     }
 // )
 
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
+
 const errorHandler = (error, req, res, next) => {
   console.log(error.message)
 
@@ -117,7 +147,6 @@ const errorHandler = (error, req, res, next) => {
 app.use(errorHandler)
 
 const PORT = process.env.PORT 
-// || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })
