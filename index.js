@@ -90,46 +90,6 @@ app.put('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-// app.get('/api/persons/:id', (req, res) => {
-//     const id = req.params.id
-//     const person = persons.find(i => i.id === id)
-//     if (person) {
-//         res.json(person)
-//     } else {
-//         res.status(404).json({error: 'The requested person does not exist'})
-//     }
-// })
-
-// app.delete('/api/persons/:id', (req, res) => {
-//     const id = req.params.id
-//     persons = persons.filter(i => i.id !== id)
-//     res.status(204).end()
-// })
-
-
-// const generateId = () => {
-//     const id = Math.floor((Math.random() * 100000))
-//     return String(id)
-// }
-
-
-// app.post('/api/persons', (req, res) => {
-//     // console.log(req.body)
-//     const body = req.body
-//     const uniqueName = !persons.some(p => p.name === body.name)
-//     if(!body.name || !body.number || !uniqueName) {
-//         return res.status(400).json({error: 'Name must be unique and name/number cannot be empty'})
-//     }
-//     const person = {
-//         id: generateId(),
-//         name: body.name,
-//         number: body.number
-//     }
-//     persons = persons.concat(person)
-//     res.json(person)
-//     }
-// )
-
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
