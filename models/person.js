@@ -7,7 +7,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
@@ -15,23 +15,23 @@ mongoose.connect(url)
   })
 
 const personSchema = new mongoose.Schema({
-    name: {
-      type: String, 
-      minLength: [3, "must be at least 3 characters long"],
-    },
-    number : {
-      type: String, 
-      minLength: [8, "must be at least 8 characters long" ],
-      match: [/^\d{2,3}-\d{5,}$/, "must be in the formet xx-xxx... or xxx-xxx..."],
-    }
+  name: {
+    type: String,
+    minLength: [3, 'must be at least 3 characters long'],
+  },
+  number : {
+    type: String,
+    minLength: [8, 'must be at least 8 characters long' ],
+    match: [/^\d{2,3}-\d{5,}$/, 'must be in the formet xx-xxx... or xxx-xxx...'],
+  }
 })
 
 personSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-      }
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
 })
 
 module.exports = mongoose.model('Person', personSchema)
